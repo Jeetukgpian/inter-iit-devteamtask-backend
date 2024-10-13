@@ -2,7 +2,8 @@ const { Location } = require("../models/godown.model");
 
 exports.getAllLocations = async (req, res) => {
   try {
-    const locations = await Location.find();
+    const locations = await Location.find({ created_by: req.user._id })
+
     res.json(locations);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -11,7 +12,11 @@ exports.getAllLocations = async (req, res) => {
 
 exports.getLocationById = async (req, res) => {
   try {
-    const location = await Location.findById(req.params.id);
+    const location = await Location.findOne({
+      _id: req.params.id,
+      created_by: req.user._id
+    })
+
     if (!location)
       return res.status(404).json({ message: "Location not found" });
     res.json(location);
@@ -34,6 +39,7 @@ exports.createLocation = async (req, res) => {
     const locationData = {
       name,
       is_godown,
+      created_by: req.user._id,
     };
 
     if (is_godown) {
@@ -71,7 +77,10 @@ exports.createLocation = async (req, res) => {
 
 exports.updateLocation = async (req, res) => {
   try {
-    const location = await Location.findById(req.params.id);
+    const location = await Location.findOne({
+      _id: req.params.id,
+      created_by: req.user._id
+    });
     if (!location)
       return res.status(404).json({ message: "Location not found" });
 
@@ -90,7 +99,10 @@ exports.updateLocation = async (req, res) => {
 
 exports.deleteLocation = async (req, res) => {
   try {
-    const location = await Location.findById(req.params.id);
+    const location = await Location.findOne({
+      _id: req.params.id,
+      created_by: req.user._id
+    });
     if (!location)
       return res.status(404).json({ message: "Location not found" });
 
