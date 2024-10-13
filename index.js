@@ -13,9 +13,10 @@ connectDB()
 
 const PORT = process.env.PORT || 5000;
 const app = express();
+//Todo update with only allowed origins allowing wild card for testing
 app.use(
   cors({
-    origin: ["https://godowns.vercel.app", "http://localhost:3000",'https://godowns.duckdns.org/'],
+    origin: "*",
     credentials: true,
   })
 );
